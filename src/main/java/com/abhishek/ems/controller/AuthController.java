@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,7 +28,9 @@ public class AuthController {
         // Dummy check, replace with actual user service logic
         List<User> users = userRepository.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         if (users != null && users.size() == 1) {
-            String token = jwtUtil.generateToken(loginRequest.getUsername());
+            Map<String, String> userInfo = new HashMap<>();
+            userInfo.put("role", "ADMIN");
+            String token = jwtUtil.generateToken(loginRequest.getEmail(), "ADMIN");
             return ResponseEntity.ok(new AuthResponse(token));
         }
         return ResponseEntity.status(401).body("Invalid credentials");

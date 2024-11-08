@@ -8,9 +8,10 @@ import java.util.Date;
 public class JwtUtil {
     private final String SECRET_KEY = "test_abhishek_8_nov_2024";
 
-    public String generateToken(String username) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
